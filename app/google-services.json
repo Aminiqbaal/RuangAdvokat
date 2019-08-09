@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "290244197494",
+    "firebase_url": "https://ruangadvokat-6c7c1.firebaseio.com",
+    "project_id": "ruangadvokat-6c7c1",
+    "storage_bucket": "ruangadvokat-6c7c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290244197494:android:92e4c6f1f7b96510",
+        "android_client_info": {
+          "package_name": "com.iqbaal.ruangadvokat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290244197494-8vessfl74ogvtoph436pr9t9tam0n508.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iqbaal.ruangadvokat",
+            "certificate_hash": "403c33c9d9be59231f783e25a44e7ac47d769b25"
+          }
+        },
+        {
+          "client_id": "290244197494-2u9u1kmm1sdq8m172b96a60odfhpj3hc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwaCfT0EfgCyl9Et4RpoSUp1gI3GPOj3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290244197494-2u9u1kmm1sdq8m172b96a60odfhpj3hc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Ruang Advokat</string>
+    <string name="home">Beranda</string>
+    <string name="schedule">Jadwal</string>
+    <string name="status">Status</string>
+    <string name="notification">Notifikasi</string>
+    <string name="account">Akun</string>
+    <string name="has_account">Sudah punya akun?</string>
+    <string name="login">Masuk</string>
+    <string name="password">Kata Sandi</string>
+    <string name="email_address">Alamat Email</string>
+    <string name="logout">Keluar</string>
+    <string name="client">Klien</string>
+    <string name="advocat">Advokat</string>
+    <string name="law_firm">Lembaga Hukum</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="register_title">Daftar sebagai</string>
+    <string name="no_account">Belum punya akun?</string>
+    <string name="register">Daftar</string>
+    <string name="name">Nama Lengkap</string>
+    <string name="company">Perusahaan</string>
+    <string name="birthday">Tanggal Lahir</string>
+    <string name="phone">Nomor Telepon</string>
+    <string name="password_confirm">Ulangi Kata Sandi</string>
+    <string name="register_as_client">Daftar sebagai klien</string>
+    <string name="accept">Saya menyetujui</string>
+    <string name="terms_and_conditions">Syarat dan Ketentuan</string>
+    <string-array name="gender">
+        <item>Pria</item>
+        <item>Wanita</item>
+    </string-array>
+</resources>
