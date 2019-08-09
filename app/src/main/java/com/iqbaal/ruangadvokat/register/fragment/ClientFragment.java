@@ -20,12 +20,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iqbaal.ruangadvokat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.iqbaal.ruangadvokat.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -111,19 +111,20 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             Toast.makeText(getContext(), "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         Toast.makeText(getContext(), "Silahkan cek email Anda untuk verifikasi", Toast.LENGTH_LONG).show();
+                                        getActivity().finish();
                                     }
                                 }
                             });
-                        }else{
+                        } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getContext(), "Pendaftaran gagal",
                                     Toast.LENGTH_SHORT).show();
@@ -182,10 +183,10 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
             validated = false;
         } else passwordConfirm.setError(null);
 
-        if(!agreement.isChecked()){
+        if (!agreement.isChecked()) {
             agreement.setError("harus diisi");
             validated = false;
-        }else agreement.setError(null);
+        } else agreement.setError(null);
 
         return validated;
     }
@@ -198,7 +199,7 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
         String date = birthday.getText().toString();
         Calendar calendar = Calendar.getInstance();
         int mYear = date.isEmpty() ? calendar.get(Calendar.YEAR) : Integer.parseInt(date.substring(6));
-        int mMonth = date.isEmpty() ? calendar.get(Calendar.MONTH) : Integer.parseInt(date.substring(3, 5))-1;
+        int mMonth = date.isEmpty() ? calendar.get(Calendar.MONTH) : Integer.parseInt(date.substring(3, 5)) - 1;
         int mDay = date.isEmpty() ? calendar.get(Calendar.DAY_OF_MONTH) : Integer.parseInt(date.substring(0, 2));
         DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override

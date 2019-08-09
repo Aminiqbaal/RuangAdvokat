@@ -27,8 +27,41 @@
     <string name="register_as_client">Daftar sebagai klien</string>
     <string name="accept">Saya menyetujui</string>
     <string name="terms_and_conditions">Syarat dan Ketentuan</string>
+    <string name="register_as_advocat">Daftar sebagai advokat</string>
+    <string name="address">Alamat</string>
+    <string name="birthplace">Tempat Lahir</string>
+    <string name="certificate_number">Nomor Sertifikat</string>
+    <string name="advocat_card">Kartu Advokat</string>
+    <string name="experience">Pengalaman (Minimal 2 tahun)</string>
+    <string name="register_as_law_firm">Daftar sebagai lembaga hukum</string>
     <string-array name="gender">
+        <item>Pilih Jenis Kelamin</item>
         <item>Pria</item>
         <item>Wanita</item>
+    </string-array>
+    <string-array name="experience">
+        <item>Pilih Lama Pengalaman</item>
+        <item>2 Tahun</item>
+        <item>3 Tahun</item>
+        <item>4 Tahun</item>
+        <item>5 Tahun</item>
+        <item>6 Tahun</item>
+        <item>7 Tahun</item>
+        <item>8 Tahun</item>
+        <item>9 Tahun</item>
+        <item>10 Tahun</item>
+        <item>>10 Tahun</item>
+    </string-array>
+    <string-array name="expert">
+        <item>Pilih Keahlian</item>
+        <item>Keluarga</item>
+        <item>Bisnis</item>
+        <item>Hutang Piutang</item>
+        <item>Teknologi Informasi</item>
+        <item>Ketenagakerjaan</item>
+        <item>Pertanahan dan Properti</item>
+        <item>Kekayaan Intelektual</item>
+        <item>Seluruh Pidana</item>
+        <item>Seluruh Perdata</item>
     </string-array>
 </resources>

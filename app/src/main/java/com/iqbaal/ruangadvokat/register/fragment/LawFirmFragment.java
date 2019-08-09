@@ -1,11 +1,14 @@
 package com.iqbaal.ruangadvokat.register.fragment;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.iqbaal.ruangadvokat.R;
 
@@ -24,7 +27,21 @@ public class LawFirmFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_law_firm, container, false);
+        View view = inflater.inflate(R.layout.fragment_law_firm, container, false);
+        TextView callwa = view.findViewById(R.id.call_wa);
+        callwa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://wa.me/6282132638105";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+        return view;
+
     }
+
+
 
 }

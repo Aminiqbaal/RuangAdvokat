@@ -68,7 +68,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        if(currentUser != null && currentUser.isEmailVerified()) updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser user) {
@@ -76,7 +76,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             user_email.setText(user.getEmail());
             loginLayout.setVisibility(View.GONE);
             profileLayout.setVisibility(View.VISIBLE);
-        } else {
+        }else if(user != null && !user.isEmailVerified()){
+            Toast.makeText(getContext(), "Email belum diverifikasi. Harap cek email Anda", Toast.LENGTH_SHORT).show();
+        } else{
             loginLayout.setVisibility(View.VISIBLE);
             profileLayout.setVisibility(View.GONE);
         }
