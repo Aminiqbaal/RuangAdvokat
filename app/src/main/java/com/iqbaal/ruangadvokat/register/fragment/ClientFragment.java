@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.Patterns;
@@ -25,7 +26,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.iqbaal.ruangadvokat.R;
+import com.iqbaal.ruangadvokat.model.Client;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,14 +40,13 @@ import java.util.Locale;
  * A simple {@link Fragment} subclass.
  */
 public class ClientFragment extends Fragment implements View.OnClickListener {
-    private View view;
     private EditText name, birthday, company, phone, email, password, passwordConfirm;
-    private TextView termsAndConditions;
+    private String sName, sBirthday, sPhone, sEmail, sPassword;
     private Spinner gender;
     private CheckBox agreement;
-    private Button register;
-    private FirebaseAuth mAuth;
     private String TAG = "Client Fragment";
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     public ClientFragment() {
         // Required empty public constructor
@@ -54,7 +57,7 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_client, container, false);
+        View view = inflater.inflate(R.layout.fragment_client, container, false);
         name = view.findViewById(R.id.client_name);
         gender = view.findViewById(R.id.client_gender);
         birthday = view.findViewById(R.id.client_birthday);
@@ -64,14 +67,16 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
         password = view.findViewById(R.id.client_password);
         passwordConfirm = view.findViewById(R.id.client_password_confirm);
         agreement = view.findViewById(R.id.client_agreement);
-        termsAndConditions = view.findViewById(R.id.terms_and_conditions);
-        register = view.findViewById(R.id.client_register);
+
+        TextView termsAndConditions = view.findViewById(R.id.terms_and_conditions);
+        Button register = view.findViewById(R.id.client_register);
 
         birthday.setOnClickListener(this);
         termsAndConditions.setOnClickListener(this);
         register.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         return view;
     }
@@ -94,17 +99,13 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
     private void signup() {
         if (!validate()) return;
 
-        String sName = name.getText().toString();
         String sGender = gender.getSelectedItem().toString();
-        String sBirthday = birthday.getText().toString();
         String sCompany = company.getText().toString();
-        String sPhone = phone.getText().toString();
-        String sEmail = email.getText().toString();
-        String sPassword = password.getText().toString();
+        final Client client = new Client(sName, sGender, sBirthday, sCompany, sPhone, sEmail);
 
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Mendaftarkan akun Anda...");
+        progressDialog.setMessage(getString(R.string.signing_up));
         progressDialog.show();
 
         mAuth.createUserWithEmailAndPassword(sEmail, sPassword)
@@ -113,20 +114,11 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(getContext(), "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(getContext(), "Silahkan cek email Anda untuk verifikasi", Toast.LENGTH_LONG).show();
-                                        getActivity().finish();
-                                    }
-                                }
-                            });
+                            mDatabase.child("client").push().setValue(client);
+                            sendVerificationEmail(mAuth.getCurrentUser());
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getContext(), "Pendaftaran gagal",
+                            Toast.makeText(getContext(), getString(R.string.register_failed),
                                     Toast.LENGTH_SHORT).show();
                         }
                         progressDialog.dismiss();
@@ -134,57 +126,87 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
                 });
     }
 
+    private void sendVerificationEmail(FirebaseUser user) {
+        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.check_email), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction(getString(R.string.okay), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getActivity().finish();
+                        }
+                    });
+                    snackbar.show();
+                }else
+                    Toast.makeText(getContext(), getString(R.string.verif_email_failed_to_send), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private boolean validate() {
         boolean validated = true;
 
-        String sName = name.getText().toString();
-        String sPhone = phone.getText().toString();
-        String sEmail = email.getText().toString();
-        String sPassword = password.getText().toString();
+        sName = name.getText().toString();
+        sBirthday = birthday.getText().toString();
+        sPhone = phone.getText().toString();
+        sEmail = email.getText().toString();
+        sPassword = password.getText().toString();
         String sPasswordConfirm = passwordConfirm.getText().toString();
 
         if (sName.isEmpty()) {
-            name.setError("harus diisi");
+            name.setError(getString(R.string.must_be_filled));
             validated = false;
         } else name.setError(null);
 
+        if (gender.getSelectedItemPosition() == 0) {
+            gender.setBackgroundColor(getResources().getColor(R.color.transparentRed));
+            validated = false;
+        } else gender.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+        if (sBirthday.isEmpty()) {
+            birthday.setError(getString(R.string.must_be_filled));
+            validated = false;
+        } else birthday.setError(null);
+
         if (sPhone.isEmpty()) {
-            phone.setError("harus diisi");
+            phone.setError(getString(R.string.must_be_filled));
             validated = false;
         } else if (!Patterns.PHONE.matcher(sPhone).matches()) {
-            phone.setError("masukkan nomor telepon yang valid");
+            phone.setError(getString(R.string.invalid_phone));
             validated = false;
         } else phone.setError(null);
 
         if (sEmail.isEmpty()) {
-            email.setError("harus diisi");
+            email.setError(getString(R.string.must_be_filled));
             validated = false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(sEmail).matches()) {
-            email.setError("masukkan nomor telepon yang valid");
+            email.setError(getString(R.string.invalid_email));
             validated = false;
         } else email.setError(null);
 
         if (sPassword.isEmpty()) {
-            password.setError("harus diisi");
+            password.setError(getString(R.string.must_be_filled));
             validated = false;
         } else if (sPassword.length() < 8) {
-            password.setError("minimal 8 karakter");
+            password.setError(getString(R.string.min_char));
             validated = false;
         } else password.setError(null);
 
         if (sPasswordConfirm.isEmpty()) {
-            passwordConfirm.setError("harus diisi");
+            passwordConfirm.setError(getString(R.string.must_be_filled));
             validated = false;
         } else if (sPasswordConfirm.length() < 8) {
-            passwordConfirm.setError("minimal 8 karakter");
+            passwordConfirm.setError(getString(R.string.min_char));
             validated = false;
         } else if (!sPasswordConfirm.equals(sPassword)) {
-            passwordConfirm.setError("kata sandi tidak cocok");
+            passwordConfirm.setError(getString(R.string.unmatch_password));
             validated = false;
         } else passwordConfirm.setError(null);
 
         if (!agreement.isChecked()) {
-            agreement.setError("harus diisi");
+            agreement.setError(getString(R.string.must_be_filled));
             validated = false;
         } else agreement.setError(null);
 
@@ -193,6 +215,8 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
 
     private void showTermsAndConditions() {
         AlertDialog.Builder popup = new AlertDialog.Builder(getContext());
+        popup.setTitle(getString(R.string.terms_and_conditions)).setMessage(".....").setCancelable(true);
+        popup.show();
     }
 
     private void showDatePicker() {

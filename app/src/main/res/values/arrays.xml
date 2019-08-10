@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="status">
+        <item>Pilih Status</item>
+        <item>Magang</item>
+        <item>Profesi</item>
+    </string-array>
+    <string-array name="gender">
+        <item>Pilih Jenis Kelamin</item>
+        <item>Pria</item>
+        <item>Wanita</item>
+    </string-array>
+    <string-array name="experience">
+        <item>Pilih Lama Pengalaman</item>
+        <item>2 Tahun</item>
+        <item>3 Tahun</item>
+        <item>4 Tahun</item>
+        <item>5 Tahun</item>
+        <item>6 Tahun</item>
+        <item>7 Tahun</item>
+        <item>8 Tahun</item>
+        <item>9 Tahun</item>
+        <item>10 Tahun</item>
+        <item>>10 Tahun</item>
+    </string-array>
+    <string-array name="expertise">
+        <item>Pilih Keahlian</item>
+        <item>Keluarga</item>
+        <item>Bisnis</item>
+        <item>Hutang Piutang</item>
+        <item>Teknologi Informasi</item>
+        <item>Ketenagakerjaan</item>
+        <item>Pertanahan dan Properti</item>
+        <item>Kekayaan Intelektual</item>
+        <item>Seluruh Pidana</item>
+        <item>Seluruh Perdata</item>
+    </string-array>
+</resources>

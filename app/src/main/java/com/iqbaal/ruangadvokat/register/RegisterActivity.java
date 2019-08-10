@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.iqbaal.ruangadvokat.R;
-import com.iqbaal.ruangadvokat.register.fragment.AdvocatFragment;
+import com.iqbaal.ruangadvokat.register.fragment.AdvocateFragment;
 import com.iqbaal.ruangadvokat.register.fragment.ClientFragment;
 import com.iqbaal.ruangadvokat.register.fragment.LawFirmFragment;
 
@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 moveFragment(new ClientFragment());
                 break;
             case R.id.advocat:
-                moveFragment(new AdvocatFragment());
+                moveFragment(new AdvocateFragment());
                 break;
             case R.id.law_firm:
                 moveFragment(new LawFirmFragment());

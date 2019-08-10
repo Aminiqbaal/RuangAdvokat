@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="status">
+        <item>Choose Status</item>
+        <item>Internship</item>
+        <item>Profession</item>
+    </string-array>
+    <string-array name="gender">
+        <item>Choose Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string-array name="experience">
+        <item>Choose Experience</item>
+        <item>2 years</item>
+        <item>3 years</item>
+        <item>4 years</item>
+        <item>5 years</item>
+        <item>6 years</item>
+        <item>7 years</item>
+        <item>8 years</item>
+        <item>9 years</item>
+        <item>10 years</item>
+        <item>>10 years</item>
+    </string-array>
+    <string-array name="expertise">
+        <item>Choose Expertise</item>
+        <item>Family</item>
+        <item>Business</item>
+        <item>Debts</item>
+        <item>Information Technology</item>
+        <item>Employment</item>
+        <item>Land and Property</item>
+        <item>Intellectual Property</item>
+        <item>All Criminal</item>
+        <item>All Civil Law</item>
+    </string-array>
+</resources>

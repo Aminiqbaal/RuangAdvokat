@@ -31,8 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class AccountFragment extends Fragment implements View.OnClickListener {
     private ConstraintLayout loginLayout, profileLayout;
     private EditText email, password;
-    private Button login, logout;
-    private TextView toRegister, user_email;
+    private TextView user_email;
     private FirebaseAuth mAuth;
     private String TAG = "Account Fragment";
 
@@ -49,14 +48,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         loginLayout = view.findViewById(R.id.login_layout);
         email = view.findViewById(R.id.email);
         password = view.findViewById(R.id.password);
-        login = view.findViewById(R.id.login);
-        toRegister = view.findViewById(R.id.to_register);
+        Button login = view.findViewById(R.id.login);
+        TextView toRegister = view.findViewById(R.id.to_register);
         login.setOnClickListener(this);
         toRegister.setOnClickListener(this);
 
         profileLayout = view.findViewById(R.id.profile_layout);
         user_email = view.findViewById(R.id.user_email);
-        logout = view.findViewById(R.id.logout);
+        Button logout = view.findViewById(R.id.logout);
         logout.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -73,11 +72,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private void updateUI(FirebaseUser user) {
         if (user != null && user.isEmailVerified()) {
+            email.setText(null);
+            password.setText(null);
             user_email.setText(user.getEmail());
             loginLayout.setVisibility(View.GONE);
             profileLayout.setVisibility(View.VISIBLE);
         }else if(user != null && !user.isEmailVerified()){
-            Toast.makeText(getContext(), "Email belum diverifikasi. Harap cek email Anda", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.email_not_verified), Toast.LENGTH_SHORT).show();
         } else{
             loginLayout.setVisibility(View.VISIBLE);
             profileLayout.setVisibility(View.GONE);
@@ -109,7 +110,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Mengautentikasi...");
+        progressDialog.setMessage(getString(R.string.authenticating));
         progressDialog.show();
 
         String sEmail = email.getText().toString();
@@ -127,7 +128,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getContext(), "Gagal masuk",
+                            Toast.makeText(getContext(), getString(R.string.login_failed),
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -143,18 +144,18 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         String sPassword = password.getText().toString();
 
         if (sEmail.isEmpty()) {
-            email.setError("harus diisi");
+            email.setError(getString(R.string.must_be_filled));
             validated = false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(sEmail).matches()) {
-            email.setError("masukkan email yang valid");
+            email.setError(getString(R.string.invalid_email));
             validated = false;
         } else email.setError(null);
 
         if (sPassword.isEmpty()) {
-            password.setError("harus diisi");
+            password.setError(getString(R.string.must_be_filled));
             validated = false;
         } else if (sPassword.length() < 8) {
-            password.setError("minimal 8 karakter");
+            password.setError(getString(R.string.min_char));
             validated = false;
         } else password.setError(null);
 

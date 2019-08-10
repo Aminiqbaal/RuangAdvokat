@@ -5,23 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
-    tools:context=".register.fragment.AdvocatFragment">
+    tools:context=".register.fragment.AdvocateFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/law_firm_register_title"
+            android:id="@+id/advocate_register_title"
             style="@style/Text.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/register_as_advocat"
+            android:text="@string/register_as_advocate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/advocat_name"
+            android:id="@+id/advocate_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -29,10 +29,10 @@
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/law_firm_register_title" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_register_title" />
 
         <EditText
-            android:id="@+id/advocat_address"
+            android:id="@+id/advocate_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -40,20 +40,20 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_name" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_name" />
 
         <Spinner
-            android:id="@+id/advocat_gender"
+            android:id="@+id/advocate_gender"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="8dp"
             android:entries="@array/gender"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_address" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_address" />
 
         <EditText
-            android:id="@+id/advocat_birthplace"
+            android:id="@+id/advocate_birthplace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -63,10 +63,10 @@
             android:inputType="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_gender" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_gender" />
 
         <EditText
-            android:id="@+id/advocat_birthday"
+            android:id="@+id/advocate_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -76,114 +76,116 @@
             android:inputType="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_birthplace" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_birthplace" />
 
-        <EditText
-            android:id="@+id/advocat_status"
+        <Spinner
+            android:id="@+id/advocate_status"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginTop="8dp"
-            android:hint="@string/status"
-            android:inputType="text"
+            android:entries="@array/status"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_birthday" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_birthday" />
 
         <TextView
-            android:id="@+id/advocat_ijazah"
+            android:id="@+id/ijazah_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Ijazah"
+            android:text="@string/ijazah"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/advocat_status" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_status" />
 
         <Button
             android:id="@+id/btn_ijazah"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_marginTop="3dp"
             android:background="@drawable/round_button"
-            android:text="Pilih File"
+            android:text="@string/choose_file"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_ijazah" />
+            app:layout_constraintTop_toBottomOf="@id/ijazah_title" />
 
         <TextView
-            android:id="@+id/file_ijazah"
+            android:id="@+id/ijazah_filename"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="File"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_ijazah"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/btn_ijazah"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_ijazah"
-            app:layout_constraintTop_toTopOf="@+id/btn_ijazah" />
+            app:layout_constraintStart_toEndOf="@id/btn_ijazah"
+            app:layout_constraintTop_toTopOf="@id/btn_ijazah" />
 
         <EditText
-            android:id="@+id/advocat_sertifikasi"
+            android:id="@+id/advocate_certification"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/certificate_number"
             android:layout_marginTop="8dp"
+            android:hint="@string/certificate_number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_ijazah" />
+            app:layout_constraintTop_toBottomOf="@id/btn_ijazah" />
 
         <Button
-            android:id="@+id/btn_sertifikasi"
+            android:id="@+id/btn_certification"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:background="@drawable/round_button"
-            android:text="Pilih File"
+            android:text="@string/choose_file"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_sertifikasi" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_certification" />
 
         <TextView
-            android:id="@+id/file_sertifikasi"
+            android:id="@+id/certification_filename"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="File"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_sertifikasi"
+            android:gravity="center_vertical"
+            android:text="@string/certificate_filename"
+            app:layout_constraintBottom_toBottomOf="@id/btn_certification"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_sertifikasi"
-            app:layout_constraintTop_toTopOf="@+id/btn_sertifikasi" />
+            app:layout_constraintStart_toEndOf="@id/btn_certification"
+            app:layout_constraintTop_toTopOf="@id/btn_certification" />
 
         <EditText
-            android:id="@+id/advocat_card"
+            android:id="@+id/advocate_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/advocat_card"
             android:layout_marginTop="8dp"
+            android:hint="@string/advocate_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_sertifikasi" />
+            app:layout_constraintTop_toBottomOf="@id/btn_certification" />
 
         <Button
             android:id="@+id/btn_card"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:background="@drawable/round_button"
-            android:text="Pilih File"
+            android:text="@string/choose_file"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_card" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_card" />
 
         <TextView
-            android:id="@+id/file_card"
+            android:id="@+id/card_filename"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="File"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_card"
+            android:gravity="center_vertical"
+            android:text="@string/advocate_card_filename"
+            app:layout_constraintBottom_toBottomOf="@id/btn_card"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_card"
-            app:layout_constraintTop_toTopOf="@+id/btn_card" />
+            app:layout_constraintStart_toEndOf="@id/btn_card"
+            app:layout_constraintTop_toTopOf="@id/btn_card" />
 
         <Spinner
-            android:id="@+id/advocat_experience"
+            android:id="@+id/advocate_experience"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="8dp"
@@ -193,17 +195,17 @@
             app:layout_constraintTop_toBottomOf="@id/btn_card" />
 
         <Spinner
-            android:id="@+id/advocat_expert"
+            android:id="@+id/advocate_expertise"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="8dp"
-            android:entries="@array/expert"
+            android:entries="@array/expertise"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_experience" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_experience" />
 
         <EditText
-            android:id="@+id/advocat_phone"
+            android:id="@+id/advocate_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -211,10 +213,10 @@
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_expert" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_expertise" />
 
         <EditText
-            android:id="@+id/advocat_email"
+            android:id="@+id/advocate_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -222,10 +224,10 @@
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_phone" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_phone" />
 
         <EditText
-            android:id="@+id/advocat_password"
+            android:id="@+id/advocate_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -233,10 +235,10 @@
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_email" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_email" />
 
         <EditText
-            android:id="@+id/advocat_password_confirm"
+            android:id="@+id/advocate_password_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -244,139 +246,143 @@
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_password" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_password" />
 
         <TextView
-            android:id="@+id/advocat_ktp"
+            android:id="@+id/advocate_selfie_id_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Foto selfie dengan KTP"
+            android:text="@string/selfie_with_ktp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/advocat_password_confirm" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_password_confirm" />
 
         <Button
-            android:id="@+id/btn_ktp"
+            android:id="@+id/btn_selfie_id_card"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_marginTop="3dp"
             android:background="@drawable/round_button"
-            android:text="Pilih File"
+            android:text="@string/choose_file"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_ktp" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_id_card" />
 
         <TextView
-            android:id="@+id/file_ktp"
+            android:id="@+id/selfie_id_card_filename"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="File"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_ktp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/btn_selfie_id_card"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_ktp"
-            app:layout_constraintTop_toTopOf="@+id/btn_ktp" />
+            app:layout_constraintStart_toEndOf="@id/btn_selfie_id_card"
+            app:layout_constraintTop_toTopOf="@id/btn_selfie_id_card" />
 
         <TextView
-            android:id="@+id/advocat_pkpa"
+            android:id="@+id/advocate_selfie_pkpa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Foto selfie dengan PKPA"
+            android:text="@string/selfie_with_pkpa"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_ktp" />
+            app:layout_constraintTop_toBottomOf="@id/btn_selfie_id_card" />
 
         <Button
-            android:id="@+id/btn_pkpa"
+            android:id="@+id/btn_selfie_pkpa"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_marginTop="3dp"
             android:background="@drawable/round_button"
-            android:text="Pilih File"
+            android:text="@string/choose_file"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_pkpa" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_pkpa" />
 
         <TextView
-            android:id="@+id/file_pkpa"
+            android:id="@+id/selfie_pkpa_filename"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="File"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_pkpa"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/btn_selfie_pkpa"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_pkpa"
-            app:layout_constraintTop_toTopOf="@+id/btn_pkpa" />
+            app:layout_constraintStart_toEndOf="@id/btn_selfie_pkpa"
+            app:layout_constraintTop_toTopOf="@id/btn_selfie_pkpa" />
 
         <TextView
-            android:id="@+id/advocat_upa"
+            android:id="@+id/advocate_selfie_upa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Foto selfie dengan UPA"
+            android:text="@string/selfie_with_upa"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_pkpa" />
+            app:layout_constraintTop_toBottomOf="@id/btn_selfie_pkpa" />
 
         <Button
-            android:id="@+id/btn_upa"
+            android:id="@+id/btn_selfie_upa"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_marginTop="3dp"
             android:background="@drawable/round_button"
-            android:text="Pilih File"
+            android:text="@string/choose_file"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_upa" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_upa" />
 
         <TextView
-            android:id="@+id/file_upa"
+            android:id="@+id/selfie_upa_filename"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="File"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_upa"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/btn_selfie_upa"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_upa"
-            app:layout_constraintTop_toTopOf="@+id/btn_upa" />
+            app:layout_constraintStart_toEndOf="@id/btn_selfie_upa"
+            app:layout_constraintTop_toTopOf="@id/btn_selfie_upa" />
 
         <TextView
-            android:id="@+id/advocat_kartu"
+            android:id="@+id/advocate_selfie_advocate_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Foto selfie dengan Kartu Advokat"
+            android:text="@string/selfie_with_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_upa" />
+            app:layout_constraintTop_toBottomOf="@id/btn_selfie_upa" />
 
         <Button
-            android:id="@+id/btn_kartu"
+            android:id="@+id/btn_selfie_advocate_card"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_marginTop="3dp"
             android:background="@drawable/round_button"
-            android:text="Pilih File"
+            android:text="@string/choose_file"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_kartu" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_advocate_card" />
 
         <TextView
-            android:id="@+id/file_kartu"
+            android:id="@+id/selfie_advocate_card_filename"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="File"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_kartu"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/btn_selfie_advocate_card"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_kartu"
-            app:layout_constraintTop_toTopOf="@+id/btn_kartu" />
+            app:layout_constraintStart_toEndOf="@id/btn_selfie_advocate_card"
+            app:layout_constraintTop_toTopOf="@id/btn_selfie_advocate_card" />
 
         <CheckBox
-            android:id="@+id/advocat_agreement"
+            android:id="@+id/advocate_agreement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/accept"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_kartu" />
+            app:layout_constraintTop_toBottomOf="@id/btn_selfie_advocate_card" />
 
         <TextView
             android:id="@+id/terms_and_conditions"
@@ -385,12 +391,12 @@
             android:layout_marginStart="5dp"
             android:text="@string/terms_and_conditions"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/advocat_agreement"
-            app:layout_constraintStart_toEndOf="@id/advocat_agreement"
-            app:layout_constraintTop_toTopOf="@id/advocat_agreement" />
+            app:layout_constraintBottom_toBottomOf="@id/advocate_agreement"
+            app:layout_constraintStart_toEndOf="@id/advocate_agreement"
+            app:layout_constraintTop_toTopOf="@id/advocate_agreement" />
 
         <Button
-            android:id="@+id/advocat_register"
+            android:id="@+id/advocate_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button"
@@ -398,6 +404,6 @@
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocat_agreement" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_agreement" />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
