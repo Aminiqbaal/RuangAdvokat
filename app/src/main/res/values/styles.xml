@@ -19,4 +19,8 @@
     <style name="Text.Subtitle">
         <item name="android:textSize">23sp</item>
     </style>
+
+    <style name="Text.Little">
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>

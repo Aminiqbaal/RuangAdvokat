@@ -2,15 +2,17 @@ package com.iqbaal.ruangadvokat.register.fragment;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,8 +42,10 @@ import com.google.firebase.storage.UploadTask;
 import com.iqbaal.ruangadvokat.R;
 import com.iqbaal.ruangadvokat.model.Advocate;
 
-import java.io.File;
-import java.util.UUID;
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.ADVOCATE_CARD;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.CERTIFICATE;
@@ -57,7 +62,6 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
     private String TAG = "Advocate Fragment";
     private String sName, sAddress, sBirthplace, sBirthday, sCertificateNumber, sAdvocateCard,
             sPhone, sEmail, sPassword;
-    private ArrayMap<String, Uri> fileToUpload = new ArrayMap<>();
     private EditText name, address, birthplace, birthday, certificationNumber, advocateCard,
             phone, email, password, passwordConfirm;
     private Spinner gender, status, experience, expertise;
@@ -81,7 +85,7 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         address = view.findViewById(R.id.advocate_address);
         birthplace = view.findViewById(R.id.advocate_birthplace);
         birthday = view.findViewById(R.id.advocate_birthday);
-        status = view.findViewById(R.id.status);
+        status = view.findViewById(R.id.advocate_status);
         certificationNumber = view.findViewById(R.id.advocate_certification);
         advocateCard = view.findViewById(R.id.advocate_card);
         phone = view.findViewById(R.id.advocate_phone);
@@ -95,7 +99,7 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
 
         ijazahFilename = view.findViewById(R.id.ijazah_filename);
         certificateFilename = view.findViewById(R.id.certification_filename);
-        advocateCardFilename = view.findViewById(R.id.card_filename);
+        advocateCardFilename = view.findViewById(R.id.advocate_card_filename);
         selfieIDCardFilename = view.findViewById(R.id.selfie_id_card_filename);
         selfiePKPAFilename = view.findViewById(R.id.selfie_pkpa_filename);
         selfieUPAFilename = view.findViewById(R.id.selfie_upa_filename);
@@ -105,13 +109,14 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
 
         Button chooseIjazah = view.findViewById(R.id.btn_ijazah);
         Button chooseCertificate = view.findViewById(R.id.btn_certification);
-        Button chooseAdvocateCard = view.findViewById(R.id.btn_card);
+        Button chooseAdvocateCard = view.findViewById(R.id.btn_advocate_card);
         Button selfieIDCard = view.findViewById(R.id.btn_selfie_id_card);
         Button selfiePKPA = view.findViewById(R.id.btn_selfie_pkpa);
         Button selfieUPA = view.findViewById(R.id.btn_selfie_upa);
         Button selfieAdvocateCard = view.findViewById(R.id.btn_selfie_advocate_card);
         Button register = view.findViewById(R.id.advocate_register);
 
+        birthday.setOnClickListener(this);
         chooseIjazah.setOnClickListener(this);
         chooseCertificate.setOnClickListener(this);
         chooseAdvocateCard.setOnClickListener(this);
@@ -119,22 +124,8 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         selfiePKPA.setOnClickListener(this);
         selfieUPA.setOnClickListener(this);
         selfieAdvocateCard.setOnClickListener(this);
+        termsAndConditions.setOnClickListener(this);
         register.setOnClickListener(this);
-
-        selfieIDCard.setOnClickListener(new View.OnClickListener() {
-            File file;
-            Uri fileUri;
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                file = new File(getActivity().getExternalCacheDir(),
-                        String.valueOf(System.currentTimeMillis()) + ".jpg");
-                fileUri = Uri.fromFile(file);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                startActivityForResult(intent, 4);
-            }
-        });
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -143,102 +134,174 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    private void openGallery(int requestCode) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.choose_file)), requestCode);
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
             if (requestCode == IJAZAH) {
-                fileToUpload.put("ijazah", data.getData());
+                uploadFile(getString(R.string.ijazah), data.getData());
                 ijazahFilename.setText(data.getData().getLastPathSegment());
             } else if (requestCode == CERTIFICATE) {
-                fileToUpload.put("certificate", data.getData());
+                uploadFile(getString(R.string.certificate), data.getData());
                 certificateFilename.setText(data.getData().getLastPathSegment());
             } else if (requestCode == ADVOCATE_CARD) {
-                fileToUpload.put("advocate card", data.getData());
+                uploadFile(getString(R.string.advocate_card), data.getData());
                 advocateCardFilename.setText(data.getData().getLastPathSegment());
             } else if (requestCode == SELFIE_ID_CARD) {
-                fileToUpload.put("selfie id card", data.getData());
-                selfieIDCardFilename.setText(data.getData().getLastPathSegment());
+                byte[] byteData = bitmapConvert((Bitmap) data.getExtras().get("data"));
+                uploadFile(getString(R.string.selfie_with_id_card), byteData);
+                selfieIDCardFilename.setText(data.getExtras().get("data").toString().substring(24));
+            } else if (requestCode == SELFIE_PKPA) {
+                byte[] byteData = bitmapConvert((Bitmap) data.getExtras().get("data"));
+                uploadFile(getString(R.string.selfie_with_pkpa), byteData);
+                selfiePKPAFilename.setText(data.getExtras().get("data").toString().substring(24));
+            } else if (requestCode == SELFIE_UPA) {
+                byte[] byteData = bitmapConvert((Bitmap) data.getExtras().get("data"));
+                uploadFile(getString(R.string.selfie_with_upa), byteData);
+                selfieUPAFilename.setText(data.getExtras().get("data").toString().substring(24));
+            } else if (requestCode == SELFIE_ADVOCATE_CARD) {
+                byte[] byteData = bitmapConvert((Bitmap) data.getExtras().get("data"));
+                uploadFile(getString(R.string.selfie_with_advocate_card), byteData);
+                selfieAdvocateCardFilename.setText(data.getExtras().get("data").toString().substring(24));
             }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
+        } else if (resultCode == Activity.RESULT_CANCELED)
             Toast.makeText(getActivity(), "Canceled", Toast.LENGTH_SHORT).show();
-        }
+        else
+            Toast.makeText(getContext(), "null data", Toast.LENGTH_SHORT).show();
     }
 
-    private void uploadFile(Uri filePath) {
-        if (filePath != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(getContext());
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
+    private byte[] bitmapConvert(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return baos.toByteArray();
+    }
 
-            StorageReference ref = mStorage.child("images/" + UUID.randomUUID().toString());
-            ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(getContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                        }
-                    });
-        }
+    private void uploadFile(final String name, Uri uri) {
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle(String.format("%s %s...", getString(R.string.uploading), name));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setProgressNumberFormat(null);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        StorageReference ref = mStorage.child("images").child(email.getText().toString()).child(name);
+        ref.putFile(uri).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                progressDialog.setProgress((int) progress);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, name + " uploaded");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), getString(R.string.upload_failed), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, name + " failed to upload");
+            }
+        });
+    }
+
+    private void uploadFile(final String name, byte[] bytes) {
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle(String.format("%s %s...", getString(R.string.uploading), name));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setProgressNumberFormat(null);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        StorageReference ref = mStorage.child("images").child(email.getText().toString()).child(name);
+        ref.putBytes(bytes)
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        progressDialog.setProgress((int) progress);
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, name + " uploaded");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), getString(R.string.upload_failed), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, name + " failed to upload");
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.advocate_birthday:
+                showDatePicker();
+                break;
+            case R.id.terms_and_conditions:
+                showTermsAndConditions();
+                break;
             case R.id.btn_ijazah:
                 openGallery(IJAZAH);
                 break;
             case R.id.btn_certification:
                 openGallery(CERTIFICATE);
                 break;
-            case R.id.btn_card:
+            case R.id.btn_advocate_card:
                 openGallery(ADVOCATE_CARD);
                 break;
             case R.id.btn_selfie_id_card:
-                openCamera(SELFIE_ID_CARD);break;
+                openCamera(SELFIE_ID_CARD);
+                break;
             case R.id.btn_selfie_pkpa:
-                openCamera(SELFIE_PKPA);break;
+                openCamera(SELFIE_PKPA);
+                break;
             case R.id.btn_selfie_upa:
-                openCamera(SELFIE_UPA);break;
+                openCamera(SELFIE_UPA);
+                break;
             case R.id.btn_selfie_advocate_card:
-                openCamera(SELFIE_ADVOCATE_CARD);break;
+                openCamera(SELFIE_ADVOCATE_CARD);
+                break;
             case R.id.advocate_register:
                 signup();
                 break;
         }
     }
 
+    private void openGallery(int requestCode) {
+        sEmail = email.getText().toString();
+        if (sEmail.isEmpty()) {
+            email.setError(getString(R.string.must_be_filled));
+            return;
+        }
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.choose_file)), requestCode);
+    }
+
     private void openCamera(int requestCode) {
+        sEmail = email.getText().toString();
+        if (sEmail.isEmpty()) {
+            email.setError(getString(R.string.must_be_filled));
+            return;
+        }
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null)
-            startActivityForResult(intent, requestCode);
+        startActivityForResult(intent, requestCode);
     }
 
     private void signup() {
         if (!validate()) return;
-
 
         String sGender = gender.getSelectedItem().toString();
         String sStatus = status.getSelectedItem().toString();
@@ -263,7 +326,8 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             mDatabase.child("advocate").push().setValue(advocate);
-                            sendEmailVerification(mAuth.getCurrentUser());
+                            if (mAuth.getCurrentUser() != null)
+                                sendEmailVerification(mAuth.getCurrentUser());
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getContext(), getString(R.string.register_failed),
@@ -291,6 +355,30 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+    }
+
+    private void showTermsAndConditions() {
+        AlertDialog.Builder popup = new AlertDialog.Builder(getContext());
+        popup.setTitle(getString(R.string.terms_and_conditions)).setMessage(".....").setCancelable(true);
+        popup.show();
+    }
+
+    private void showDatePicker() {
+        String date = birthday.getText().toString();
+        Calendar calendar = Calendar.getInstance();
+        int mYear = date.isEmpty() ? calendar.get(Calendar.YEAR) : Integer.parseInt(date.substring(6));
+        int mMonth = date.isEmpty() ? calendar.get(Calendar.MONTH) : Integer.parseInt(date.substring(3, 5)) - 1;
+        int mDay = date.isEmpty() ? calendar.get(Calendar.DAY_OF_MONTH) : Integer.parseInt(date.substring(0, 2));
+        DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, month, dayOfMonth);
+                birthday.setText(dateFormat.format(newDate.getTime()));
+            }
+        }, mYear, mMonth, mDay);
+        dialog.show();
     }
 
     private boolean validate() {

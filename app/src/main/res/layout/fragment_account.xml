@@ -68,13 +68,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background="@drawable/button"
                     android:text="@string/login"
+                    android:textColor="@android:color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/password" />
 
                 <TextView
                     android:id="@+id/has_account"
+                    style="@style/Text.Little"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -86,6 +89,7 @@
 
                 <TextView
                     android:id="@+id/to_register"
+                    style="@style/Text.Little"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"

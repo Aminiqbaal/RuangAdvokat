@@ -32,9 +32,9 @@
     <string name="register_as_law_firm">Register as law firm</string>
     <string name="register_title">Register as</string>
     <string name="schedule">Schedule</string>
-    <string name="selfie_with_card">Selfie with Advocate Card</string>
-    <string name="selfie_with_ktp">Selfie with ID Card</string>
-    <string name="selfie_with_pkpa">Selfir with PKPA</string>
+    <string name="selfie_with_advocate_card">Selfie with Advocate Card</string>
+    <string name="selfie_with_id_card">Selfie with ID Card</string>
+    <string name="selfie_with_pkpa">Selfie with PKPA</string>
     <string name="selfie_with_upa">Selfie with UPA</string>
     <string name="status">Status</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
@@ -43,16 +43,22 @@
     <string name="okay">Okay</string>
     <string name="check_email">Check your email for verification</string>
     <string name="email_not_verified">Email not verified. Please check your email/</string>
-    <string name="authenticating">Authenticating...</string>
+    <string name="authenticating">Authenticating…</string>
     <string name="login_failed">Login failed</string>
     <string name="must_be_filled">must be filled</string>
     <string name="invalid_email">enter a valid email</string>
     <string name="min_char">at least 8 characters</string>
-    <string name="signing_up">Signing up...</string>
+    <string name="signing_up">Signing up…</string>
     <string name="invalid_phone">enter a valid phone number</string>
     <string name="unmatch_password">password not match</string>
     <string name="register_failed">Register failed</string>
     <string name="certificate_filename">Cerificate filename</string>
     <string name="advocate_card_filename">Advocate card filename</string>
     <string name="verif_email_failed_to_send">Verification email failed to send</string>
+    <string name="open_camera">Open camera</string>
+    <string name="certificate">Certificate</string>
+    <string name="uploading">Uploading</string>
+    <string name="done">done</string>
+    <string name="upload_failed">Upload failed</string>
+    <string name="upload_success">Upload success</string>
 </resources>

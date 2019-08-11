@@ -17,13 +17,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iqbaal.ruangadvokat.R;
-import com.iqbaal.ruangadvokat.register.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.iqbaal.ruangadvokat.R;
+import com.iqbaal.ruangadvokat.register.RegisterActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,7 +67,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null && currentUser.isEmailVerified()) updateUI(currentUser);
+        if (currentUser != null) {
+            if (currentUser.isEmailVerified()) updateUI(currentUser);
+            else mAuth.signOut();
+        }
     }
 
     private void updateUI(FirebaseUser user) {
@@ -77,9 +80,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             user_email.setText(user.getEmail());
             loginLayout.setVisibility(View.GONE);
             profileLayout.setVisibility(View.VISIBLE);
-        }else if(user != null && !user.isEmailVerified()){
+        } else if (user != null && !user.isEmailVerified()) {
             Toast.makeText(getContext(), getString(R.string.email_not_verified), Toast.LENGTH_SHORT).show();
-        } else{
+        } else {
             loginLayout.setVisibility(View.VISIBLE);
             profileLayout.setVisibility(View.GONE);
         }
