@@ -1,140 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    tools:context=".main.fragment.AccountFragment">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/logout"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/birthplace_label"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/logout"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/birthplace"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/name_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/name"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logout" />
-
-    <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/user_birthplace"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/name_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/name_label"
-        app:layout_constraintTop_toTopOf="@id/name_label" />
-
-    <TextView
-        android:id="@+id/gender_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/gender"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_label" />
-
-    <TextView
-        android:id="@+id/user_gender"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/gender_label"
+        app:layout_constraintBottom_toBottomOf="@id/birthplace_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@id/gender_label" />
+        app:layout_constraintTop_toTopOf="@id/birthplace_label" />
 
     <TextView
-        android:id="@+id/birthday_label"
+        android:id="@+id/address_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/birthday"
+        android:text="@string/address"
         app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gender_label" />
+        app:layout_constraintTop_toBottomOf="@id/birthplace_label" />
 
     <TextView
-        android:id="@+id/user_birthday"
+        android:id="@+id/user_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/birthday_label"
+        app:layout_constraintBottom_toBottomOf="@id/address_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@id/birthday_label" />
-
-    <FrameLayout
-        android:id="@+id/profile"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/birthday_label">
-
-        <include
-            android:id="@+id/client_profile"
-            layout="@layout/client_profile"
-            android:visibility="gone" />
-
-        <include
-            android:id="@+id/advocate_profile"
-            layout="@layout/advocate_profile"
-            android:visibility="gone" />
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="@id/address_label" />
 
     <TextView
-        android:id="@+id/phone_label"
+        android:id="@+id/status_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/phone"
+        android:text="@string/status"
         app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile" />
+        app:layout_constraintTop_toBottomOf="@id/address_label" />
 
     <TextView
-        android:id="@+id/user_phone"
+        android:id="@+id/user_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/phone_label"
+        app:layout_constraintBottom_toBottomOf="@id/status_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@id/phone_label" />
+        app:layout_constraintTop_toTopOf="@id/status_label" />
 
     <TextView
-        android:id="@+id/email_label"
+        android:id="@+id/experience_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/email_address"
+        android:text="@string/experience"
         app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/phone_label" />
+        app:layout_constraintTop_toBottomOf="@id/status_label" />
 
     <TextView
-        android:id="@+id/user_email"
+        android:id="@+id/user_experience"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/email_label"
+        app:layout_constraintBottom_toBottomOf="@id/experience_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@id/email_label" />
+        app:layout_constraintTop_toTopOf="@id/experience_label" />
+
+    <TextView
+        android:id="@+id/expertise_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/expertise"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/experience_label" />
+
+    <TextView
+        android:id="@+id/user_expertise"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/expertise_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/expertise_label" />
+
+    <TextView
+        android:id="@+id/certificate_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/certificate_number"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/expertise_label" />
+
+    <TextView
+        android:id="@+id/user_certificate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/certificate_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/certificate_label" />
+
+    <TextView
+        android:id="@+id/advocate_card_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/advocate_card"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/certificate_label" />
+
+    <TextView
+        android:id="@+id/user_advocate_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/advocate_card_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/advocate_card_label" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

@@ -8,30 +8,30 @@ import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.iqbaal.ruangadvokat.LoginActivity;
 import com.iqbaal.ruangadvokat.R;
-import com.iqbaal.ruangadvokat.register.RegisterActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment implements View.OnClickListener {
-    private ConstraintLayout loginLayout, profileLayout;
-    private EditText email, password;
-    private TextView user_email;
+public class AccountFragment extends Fragment {
+    private ConstraintLayout client, advocate;
+    private TextView userName, userGender, userBirthday, userPhone, userEmail, clientCompany,
+            advocateBirthplace, advocateAddress, advocateStatus, advocateExperience, advocateExpertise,
+            advocateCertificateNumber, advocateCard;
+    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private String TAG = "Account Fragment";
 
@@ -41,127 +41,90 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
-        loginLayout = view.findViewById(R.id.login_layout);
-        email = view.findViewById(R.id.email);
-        password = view.findViewById(R.id.password);
-        Button login = view.findViewById(R.id.login);
-        TextView toRegister = view.findViewById(R.id.to_register);
-        login.setOnClickListener(this);
-        toRegister.setOnClickListener(this);
 
-        profileLayout = view.findViewById(R.id.profile_layout);
-        user_email = view.findViewById(R.id.user_email);
+        client = view.findViewById(R.id.client_profile);
+        advocate = view.findViewById(R.id.advocate_profile);
+
         Button logout = view.findViewById(R.id.logout);
-        logout.setOnClickListener(this);
-
-        mAuth = FirebaseAuth.getInstance();
-        return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            if (currentUser.isEmailVerified()) updateUI(currentUser);
-            else mAuth.signOut();
-        }
-    }
-
-    private void updateUI(FirebaseUser user) {
-        if (user != null && user.isEmailVerified()) {
-            email.setText(null);
-            password.setText(null);
-            user_email.setText(user.getEmail());
-            loginLayout.setVisibility(View.GONE);
-            profileLayout.setVisibility(View.VISIBLE);
-        } else if (user != null && !user.isEmailVerified()) {
-            Toast.makeText(getContext(), getString(R.string.email_not_verified), Toast.LENGTH_SHORT).show();
-        } else {
-            loginLayout.setVisibility(View.VISIBLE);
-            profileLayout.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.login:
-                signin();
-                break;
-            case R.id.to_register:
-                startActivity(new Intent(getContext(), RegisterActivity.class));
-                break;
-            case R.id.logout:
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 signout();
-                break;
-        }
+            }
+        });
+        userName = view.findViewById(R.id.user_name);
+        userGender = view.findViewById(R.id.user_gender);
+        userBirthday = view.findViewById(R.id.user_birthday);
+        userPhone = view.findViewById(R.id.user_phone);
+        userEmail = view.findViewById(R.id.user_email);
+
+        clientCompany = view.findViewById(R.id.user_company);
+        advocateBirthplace = view.findViewById(R.id.user_birthplace);
+        advocateAddress = view.findViewById(R.id.user_address);
+        advocateStatus = view.findViewById(R.id.user_status);
+        advocateExperience = view.findViewById(R.id.user_experience);
+        advocateExpertise = view.findViewById(R.id.user_expertise);
+        advocateCertificateNumber = view.findViewById(R.id.user_certificate);
+        advocateCard = view.findViewById(R.id.user_advocate_card);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) getUserData(mAuth.getCurrentUser().getEmail());
+
+        return view;
     }
 
     private void signout() {
         mAuth.signOut();
-        updateUI(null);
+        if (getActivity() != null) {
+            getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+            getActivity().finish();
+        }
     }
 
-    private void signin() {
-        if (!validate()) return;
-
+    private void getUserData(final String email) {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(getString(R.string.authenticating));
+        progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.show();
 
-        String sEmail = email.getText().toString();
-        String sPassword = password.getText().toString();
-
-        mAuth.signInWithEmailAndPassword(sEmail, sPassword)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getContext(), getString(R.string.login_failed),
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot root : dataSnapshot.getChildren()) {
+                    for (DataSnapshot snapshot : root.getChildren()) {
+                        if (email.equals(snapshot.child("email").getValue(String.class))) {
+                            if ("client".equals(root.getKey())) {
+                                client.setVisibility(View.VISIBLE);
+                                clientCompany.setText(snapshot.child("company").getValue(String.class));
+                            } else if ("advocate".equals(root.getKey())) {
+                                advocate.setVisibility(View.VISIBLE);
+                                advocateAddress.setText(snapshot.child("address").getValue(String.class));
+                                advocateBirthplace.setText(snapshot.child("birthplace").getValue(String.class));
+                                advocateStatus.setText(snapshot.child("status").getValue(String.class));
+                                advocateExperience.setText(snapshot.child("experience").getValue(String.class));
+                                advocateExpertise.setText(snapshot.child("expertise").getValue(String.class));
+                                advocateCertificateNumber.setText(snapshot.child("certificateNumber").getValue(String.class));
+                                advocateCard.setText(snapshot.child("advocateCard").getValue(String.class));
+                            }
+                            userName.setText(snapshot.child("name").getValue(String.class));
+                            userGender.setText(snapshot.child("gender").getValue(String.class));
+                            userBirthday.setText(snapshot.child("birthday").getValue(String.class));
+                            userPhone.setText(snapshot.child("phone").getValue(String.class));
+                            userEmail.setText(snapshot.child("email").getValue(String.class));
                         }
                         progressDialog.dismiss();
                     }
-                });
-    }
+                }
+            }
 
-    private boolean validate() {
-        boolean validated = true;
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        String sEmail = email.getText().toString();
-        String sPassword = password.getText().toString();
-
-        if (sEmail.isEmpty()) {
-            email.setError(getString(R.string.must_be_filled));
-            validated = false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(sEmail).matches()) {
-            email.setError(getString(R.string.invalid_email));
-            validated = false;
-        } else email.setError(null);
-
-        if (sPassword.isEmpty()) {
-            password.setError(getString(R.string.must_be_filled));
-            validated = false;
-        } else if (sPassword.length() < 8) {
-            password.setError(getString(R.string.min_char));
-            validated = false;
-        } else password.setError(null);
-
-        return validated;
+            }
+        });
     }
 }

@@ -46,6 +46,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void moveFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 }

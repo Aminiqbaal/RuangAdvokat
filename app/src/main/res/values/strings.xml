@@ -33,7 +33,7 @@
     <string name="birthplace">Tempat Lahir</string>
     <string name="certificate_number">Nomor Sertifikat</string>
     <string name="advocate_card">Kartu Advokat</string>
-    <string name="experience">Pengalaman (Minimal 2 tahun)</string>
+    <string name="experience">Pengalaman</string>
     <string name="register_as_law_firm">Daftar sebagai lembaga hukum</string>
     <string name="ijazah">Ijazah</string>
     <string name="choose_file">Pilih File</string>
@@ -64,4 +64,8 @@
     <string name="done">selesai</string>
     <string name="upload_failed">Gagal unggah</string>
     <string name="upload_success">Berhasil unggah</string>
+    <string name="gender">Jenis Kelamin</string>
+    <string name="invalid_credentials">Kredensial tidak sah</string>
+    <string name="please_wait">Mohon tunggu…</string>
+    <string name="expertise">Keahlian</string>
 </resources>

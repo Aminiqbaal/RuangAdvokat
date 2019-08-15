@@ -21,7 +21,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,11 +35,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iqbaal.ruangadvokat.R;
+import com.iqbaal.ruangadvokat.api.ApiService;
+import com.iqbaal.ruangadvokat.model.CaptchaResponse;
 import com.iqbaal.ruangadvokat.model.Client;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.iqbaal.ruangadvokat.helper.Global.SECRET_KEY;
+import static com.iqbaal.ruangadvokat.helper.Global.SITE_KEY;
 
 
 /**
@@ -91,14 +106,37 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
                 showTermsAndConditions();
                 break;
             case R.id.client_register:
-                signup();
+                if (!validate()) return;
+                else reCaptcha();
                 break;
         }
     }
 
-    private void signup() {
-        if (!validate()) return;
+    private void showDatePicker() {
+        String date = birthday.getText().toString();
+        Calendar calendar = Calendar.getInstance();
+        int mYear = date.isEmpty() ? calendar.get(Calendar.YEAR) : Integer.parseInt(date.substring(6));
+        int mMonth = date.isEmpty() ? calendar.get(Calendar.MONTH) : Integer.parseInt(date.substring(3, 5)) - 1;
+        int mDay = date.isEmpty() ? calendar.get(Calendar.DAY_OF_MONTH) : Integer.parseInt(date.substring(0, 2));
+        DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, month, dayOfMonth);
+                birthday.setText(dateFormat.format(newDate.getTime()));
+            }
+        }, mYear, mMonth, mDay);
+        dialog.show();
+    }
 
+    private void showTermsAndConditions() {
+        AlertDialog.Builder popup = new AlertDialog.Builder(getContext());
+        popup.setTitle(getString(R.string.terms_and_conditions)).setMessage(".....").setCancelable(true);
+        popup.show();
+    }
+
+    private void signup() {
         String sGender = gender.getSelectedItem().toString();
         String sCompany = company.getText().toString();
         final Client client = new Client(sName, sGender, sBirthday, sCompany, sPhone, sEmail);
@@ -139,7 +177,7 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
                         }
                     });
                     snackbar.show();
-                }else
+                } else
                     Toast.makeText(getContext(), getString(R.string.verif_email_failed_to_send), Toast.LENGTH_SHORT).show();
             }
         });
@@ -213,27 +251,44 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
         return validated;
     }
 
-    private void showTermsAndConditions() {
-        AlertDialog.Builder popup = new AlertDialog.Builder(getContext());
-        popup.setTitle(getString(R.string.terms_and_conditions)).setMessage(".....").setCancelable(true);
-        popup.show();
-    }
+    private void reCaptcha() {
+        SafetyNet.getClient(getActivity()).verifyWithRecaptcha(SITE_KEY)
+                .addOnSuccessListener(new OnSuccessListener<SafetyNetApi.RecaptchaTokenResponse>() {
+                    @Override
+                    public void onSuccess(SafetyNetApi.RecaptchaTokenResponse response) {
+                        String userResponseToken = response.getTokenResult();
+                        if (!userResponseToken.isEmpty()) {
+                            Call<CaptchaResponse> call = ApiService.getService()
+                                    .captcha(SECRET_KEY, userResponseToken);
+                            call.enqueue(new Callback<CaptchaResponse>() {
+                                @Override
+                                public void onResponse(Call<CaptchaResponse> call, Response<CaptchaResponse> response) {
+                                    boolean isSuccess = response.body().getSuccess();
+                                    if(isSuccess) signup();
+                                    else Toast.makeText(getContext(), "Wrong reCaptcha", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, String.valueOf(response.body().getSuccess()));
+                                }
 
-    private void showDatePicker() {
-        String date = birthday.getText().toString();
-        Calendar calendar = Calendar.getInstance();
-        int mYear = date.isEmpty() ? calendar.get(Calendar.YEAR) : Integer.parseInt(date.substring(6));
-        int mMonth = date.isEmpty() ? calendar.get(Calendar.MONTH) : Integer.parseInt(date.substring(3, 5)) - 1;
-        int mDay = date.isEmpty() ? calendar.get(Calendar.DAY_OF_MONTH) : Integer.parseInt(date.substring(0, 2));
-        DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onFailure(Call<CaptchaResponse> call, Throwable t) {
+                                    t.printStackTrace();
+                                    Log.d(TAG, t.getMessage());
+                                }
+                            });
+                        }
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, month, dayOfMonth);
-                birthday.setText(dateFormat.format(newDate.getTime()));
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ApiException) {
+                    ApiException apiException = (ApiException) e;
+                    int statusCode = apiException.getStatusCode();
+                    Log.d(TAG, "Error: " + CommonStatusCodes
+                            .getStatusCodeString(statusCode));
+                } else
+                    Log.d(TAG, "Error: " + e.getMessage());
             }
-        }, mYear, mMonth, mDay);
-        dialog.show();
+        });
     }
 }

@@ -21,7 +21,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="name">Full Name</string>
-    <string name="no_account">Don\'t have an account?</string>
+    <string name="no_account">Don\'t have an account yet?</string>
     <string name="notification">Notification</string>
     <string name="password">Password</string>
     <string name="password_confirm">Password Confirmation</string>
@@ -42,7 +42,7 @@
     <string name="call_admin_title">Please contact our RuangAdvokat.com admin via</string>
     <string name="okay">Okay</string>
     <string name="check_email">Check your email for verification</string>
-    <string name="email_not_verified">Email not verified. Please check your email/</string>
+    <string name="email_not_verified">Email not verified. Please check your email</string>
     <string name="authenticating">Authenticating…</string>
     <string name="login_failed">Login failed</string>
     <string name="must_be_filled">must be filled</string>
@@ -61,4 +61,8 @@
     <string name="done">done</string>
     <string name="upload_failed">Upload failed</string>
     <string name="upload_success">Upload success</string>
+    <string name="gender">Gender</string>
+    <string name="invalid_credentials">Invalid Credentials</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="expertise">Expertise</string>
 </resources>

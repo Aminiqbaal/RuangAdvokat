@@ -26,6 +26,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,12 +44,19 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.iqbaal.ruangadvokat.R;
+import com.iqbaal.ruangadvokat.api.ApiService;
 import com.iqbaal.ruangadvokat.model.Advocate;
+import com.iqbaal.ruangadvokat.model.CaptchaResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.Executor;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.ADVOCATE_CARD;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.CERTIFICATE;
@@ -54,6 +65,8 @@ import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.SELFIE_ADVOCATE_
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.SELFIE_ID_CARD;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.SELFIE_PKPA;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.SELFIE_UPA;
+import static com.iqbaal.ruangadvokat.helper.Global.SECRET_KEY;
+import static com.iqbaal.ruangadvokat.helper.Global.SITE_KEY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -271,9 +284,34 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
                 openCamera(SELFIE_ADVOCATE_CARD);
                 break;
             case R.id.advocate_register:
-                signup();
+                if (!validate()) return;
+                else reCaptcha();
                 break;
         }
+    }
+
+    private void showDatePicker() {
+        String date = birthday.getText().toString();
+        Calendar calendar = Calendar.getInstance();
+        int mYear = date.isEmpty() ? calendar.get(Calendar.YEAR) : Integer.parseInt(date.substring(6));
+        int mMonth = date.isEmpty() ? calendar.get(Calendar.MONTH) : Integer.parseInt(date.substring(3, 5)) - 1;
+        int mDay = date.isEmpty() ? calendar.get(Calendar.DAY_OF_MONTH) : Integer.parseInt(date.substring(0, 2));
+        DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, month, dayOfMonth);
+                birthday.setText(dateFormat.format(newDate.getTime()));
+            }
+        }, mYear, mMonth, mDay);
+        dialog.show();
+    }
+
+    private void showTermsAndConditions() {
+        AlertDialog.Builder popup = new AlertDialog.Builder(getContext());
+        popup.setTitle(getString(R.string.terms_and_conditions)).setMessage(".....").setCancelable(true);
+        popup.show();
     }
 
     private void openGallery(int requestCode) {
@@ -301,19 +339,13 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
     }
 
     private void signup() {
-        if (!validate()) return;
-
         String sGender = gender.getSelectedItem().toString();
         String sStatus = status.getSelectedItem().toString();
         String sExperience = experience.getSelectedItem().toString();
         String sExpertise = expertise.getSelectedItem().toString();
-        Advocate advocate = new Advocate(sName, sAddress, sGender, sBirthplace, sBirthday,
+        final Advocate advocate = new Advocate(sName, sAddress, sGender, sBirthplace, sBirthday,
                 sStatus, sCertificateNumber, sAdvocateCard, sExperience, sExpertise, sPhone, sEmail);
 
-        createAccount(advocate);
-    }
-
-    private void createAccount(final Advocate advocate) {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(getString(R.string.signing_up));
@@ -355,30 +387,6 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-    }
-
-    private void showTermsAndConditions() {
-        AlertDialog.Builder popup = new AlertDialog.Builder(getContext());
-        popup.setTitle(getString(R.string.terms_and_conditions)).setMessage(".....").setCancelable(true);
-        popup.show();
-    }
-
-    private void showDatePicker() {
-        String date = birthday.getText().toString();
-        Calendar calendar = Calendar.getInstance();
-        int mYear = date.isEmpty() ? calendar.get(Calendar.YEAR) : Integer.parseInt(date.substring(6));
-        int mMonth = date.isEmpty() ? calendar.get(Calendar.MONTH) : Integer.parseInt(date.substring(3, 5)) - 1;
-        int mDay = date.isEmpty() ? calendar.get(Calendar.DAY_OF_MONTH) : Integer.parseInt(date.substring(0, 2));
-        DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, month, dayOfMonth);
-                birthday.setText(dateFormat.format(newDate.getTime()));
-            }
-        }, mYear, mMonth, mDay);
-        dialog.show();
     }
 
     private boolean validate() {
@@ -535,5 +543,48 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         } else agreement.setError(null);
 
         return validated;
+    }
+
+    private void reCaptcha() {
+        SafetyNet.getClient(getActivity()).verifyWithRecaptcha(SITE_KEY)
+                .addOnSuccessListener(new OnSuccessListener<SafetyNetApi.RecaptchaTokenResponse>() {
+                    @Override
+                    public void onSuccess(SafetyNetApi.RecaptchaTokenResponse response) {
+                        String userResponseToken = response.getTokenResult();
+                        if (!userResponseToken.isEmpty()) {
+                            // Validate the user response token using the
+                            // reCAPTCHA siteverify API.
+                            Call<CaptchaResponse> call = ApiService.getService()
+                                    .captcha(SECRET_KEY, userResponseToken);
+                            call.enqueue(new Callback<CaptchaResponse>() {
+                                @Override
+                                public void onResponse(Call<CaptchaResponse> call, Response<CaptchaResponse> response) {
+                                    boolean isSuccess = response.body().getSuccess();
+                                    if(isSuccess) signup();
+                                    else Toast.makeText(getContext(), String.valueOf(isSuccess), Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, String.valueOf(response.body().getSuccess()));
+                                }
+
+                                @Override
+                                public void onFailure(Call<CaptchaResponse> call, Throwable t) {
+                                    t.printStackTrace();
+                                    Log.d(TAG, t.getMessage());
+                                }
+                            });
+                        }
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ApiException) {
+                    ApiException apiException = (ApiException) e;
+                    int statusCode = apiException.getStatusCode();
+                    Log.d(TAG, "Error: " + CommonStatusCodes
+                            .getStatusCodeString(statusCode));
+                } else
+                    Log.d(TAG, "Error: " + e.getMessage());
+            }
+        });
     }
 }
