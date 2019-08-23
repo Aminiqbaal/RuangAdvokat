@@ -23,7 +23,6 @@
     <string name="register_as_client">Daftar sebagai klien</string>
     <string name="register_as_advocate">Daftar sebagai advokat</string>
     <string name="name">Nama Lengkap</string>
-    <string name="company">Perusahaan</string>
     <string name="birthday">Tanggal Lahir</string>
     <string name="phone">Nomor Telepon</string>
     <string name="password_confirm">Ulangi Kata Sandi</string>
@@ -68,4 +67,25 @@
     <string name="invalid_credentials">Kredensial tidak sah</string>
     <string name="please_wait">Mohon tunggu…</string>
     <string name="expertise">Keahlian</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="photo">Foto</string>
+    <string name="nik">NIK</string>
+    <string name="consultation">Konsultasi</string>
+    <string name="read">Baca</string>
+    <string name="legal_support">Bantuan Hukum</string>
+    <string name="document_creation">Pembuatan Dokumen</string>
+
+    <string name="family">Keluarga</string>
+    <string name="business">Bisnis</string>
+    <string name="debt">Hutang Piutang</string>
+    <string name="it">Teknologi Informasi</string>
+    <string name="employment">Ketenagakerjaan</string>
+    <string name="property">Pertanahan dan Properti</string>
+    <string name="intellectual">Kekayaan Intelektual</string>
+    <string name="criminal">Seluruh Pidana</string>
+    <string name="civil">Seluruh Perdata</string>
+    <string name="fee_hour">Biaya/Jam</string>
+    <string name="max_fee">maksimal Rp1.000.000</string>
+
 </resources>

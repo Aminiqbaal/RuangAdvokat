@@ -1,13 +1,13 @@
 package com.iqbaal.ruangadvokat.model;
 
 public class Client {
-    String name, gender, birthday, company, phone, email;
+    String name, gender, birthday, nik, phone, email;
 
-    public Client(String name, String gender, String birthday, String company, String phone, String email) {
+    public Client(String name, String gender, String birthday, String nik, String phone, String email) {
         this.name = name;
         this.gender = gender;
         this.birthday = birthday;
-        this.company = company;
+        this.nik = nik;
         this.phone = phone;
         this.email = email;
     }
@@ -24,8 +24,8 @@ public class Client {
         return birthday;
     }
 
-    public String getCompany() {
-        return company;
+    public String getNik() {
+        return nik;
     }
 
     public String getPhone() {

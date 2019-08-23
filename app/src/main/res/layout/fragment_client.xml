@@ -55,11 +55,11 @@
             app:layout_constraintTop_toBottomOf="@id/client_gender" />
 
         <EditText
-            android:id="@+id/client_company"
+            android:id="@+id/nik"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="@string/company"
+            android:hint="@string/nik"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/client_company" />
+            app:layout_constraintTop_toBottomOf="@id/nik" />
 
         <EditText
             android:id="@+id/client_email"

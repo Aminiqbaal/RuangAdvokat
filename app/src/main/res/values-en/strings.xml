@@ -11,7 +11,6 @@
     <string name="certificate_number">Certificate Number</string>
     <string name="choose_file">Choose File</string>
     <string name="client">Client</string>
-    <string name="company">Company</string>
     <string name="email_address">Email Address</string>
     <string name="experience">Experience</string>
     <string name="has_account">Already have an account?</string>
@@ -65,4 +64,22 @@
     <string name="invalid_credentials">Invalid Credentials</string>
     <string name="please_wait">Please wait…</string>
     <string name="expertise">Expertise</string>
+    <string name="photo">Photo</string>
+    <string name="nik">ID Number</string>
+    <string name="consultation">Consultation</string>
+    <string name="read">Read</string>
+    <string name="legal_support">Legal Support</string>
+    <string name="document_creation">Document Creation</string>
+
+    <string name="family">Family</string>
+    <string name="business">Business</string>
+    <string name="debt">Debts</string>
+    <string name="it">Information Technology</string>
+    <string name="employment">Employmeny</string>
+    <string name="property">Land and Property</string>
+    <string name="intellectual">Intellectual Property</string>
+    <string name="criminal">All Criminal</string>
+    <string name="civil">All Civil Law</string>
+    <string name="fee_hour">Fee/hour</string>
+    <string name="max_fee">max Rp1.000.000</string>
 </resources>

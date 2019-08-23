@@ -23,16 +23,4 @@
         <item>10 years</item>
         <item>>10 years</item>
     </string-array>
-    <string-array name="expertise">
-        <item>Choose Expertise</item>
-        <item>Family</item>
-        <item>Business</item>
-        <item>Debts</item>
-        <item>Information Technology</item>
-        <item>Employment</item>
-        <item>Land and Property</item>
-        <item>Intellectual Property</item>
-        <item>All Criminal</item>
-        <item>All Civil Law</item>
-    </string-array>
 </resources>

@@ -9,5 +9,10 @@ public class Global {
         public static final int SELFIE_PKPA = 104;
         public static final int SELFIE_UPA = 105;
         public static final int SELFIE_ADVOCATE_CARD = 106;
+        public static final int PHOTO = 107;
     }
+
+    public static final String BASE_URL = "https://www.google.com/recaptcha/";
+    public static final String SITE_KEY = "6LdU6LIUAAAAAFbATFOqNd4ICSzCQIO2H3jqKYWB";
+    public static final String SECRET_KEY = "6LdU6LIUAAAAANRqT3qztYLSM_Q0Ysjo24KPDpTw";
 }

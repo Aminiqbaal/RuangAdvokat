@@ -96,15 +96,99 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/advocate_status" />
 
-        <Spinner
-            android:id="@+id/advocate_expertise"
+        <TextView
+            android:id="@+id/advocate_expertise_title"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:entries="@array/expertise"
+            android:text="@string/expertise"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/advocate_experience" />
+
+        <CheckBox
+            android:id="@+id/family_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/family"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/advocate_expertise_title" />
+
+        <CheckBox
+            android:id="@+id/business_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/business"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/family_cb" />
+
+        <CheckBox
+            android:id="@+id/debt_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/debt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/business_cb" />
+
+        <CheckBox
+            android:id="@+id/it_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/it"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/debt_cb" />
+
+        <CheckBox
+            android:id="@+id/employment_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/employment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/it_cb" />
+
+        <CheckBox
+            android:id="@+id/property_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/property"
+            app:layout_constraintStart_toEndOf="@id/guideline2"
+            app:layout_constraintTop_toBottomOf="@id/advocate_expertise_title" />
+
+        <CheckBox
+            android:id="@+id/intellectual_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intellectual"
+            app:layout_constraintStart_toEndOf="@id/guideline2"
+            app:layout_constraintTop_toBottomOf="@id/property_cb" />
+
+        <CheckBox
+            android:id="@+id/criminal_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/criminal"
+            app:layout_constraintStart_toEndOf="@id/guideline2"
+            app:layout_constraintTop_toBottomOf="@id/intellectual_cb" />
+
+        <CheckBox
+            android:id="@+id/civil_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/civil"
+            app:layout_constraintStart_toEndOf="@id/guideline2"
+            app:layout_constraintTop_toBottomOf="@id/criminal_cb" />
+
+        <EditText
+            android:id="@+id/advocate_fee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:hint="@string/fee_hour"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/employment_cb" />
 
         <EditText
             android:id="@+id/advocate_phone"
@@ -115,7 +199,7 @@
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocate_expertise" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_fee" />
 
         <EditText
             android:id="@+id/advocate_email"
@@ -151,6 +235,38 @@
             app:layout_constraintTop_toBottomOf="@id/advocate_password" />
 
         <TextView
+            android:id="@+id/photo_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/advocate_password_confirm" />
+
+        <Button
+            android:id="@+id/btn_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/button"
+            android:text="@string/choose_file"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/photo_title" />
+
+        <TextView
+            android:id="@+id/photo_filename"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/btn_photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_photo"
+            app:layout_constraintTop_toTopOf="@id/btn_photo" />
+
+        <TextView
             android:id="@+id/ijazah_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -158,7 +274,7 @@
             android:text="@string/ijazah"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocate_password_confirm" />
+            app:layout_constraintTop_toBottomOf="@id/btn_photo" />
 
         <Button
             android:id="@+id/btn_ijazah"
@@ -182,71 +298,91 @@
             app:layout_constraintStart_toEndOf="@id/btn_ijazah"
             app:layout_constraintTop_toTopOf="@id/btn_ijazah" />
 
-        <EditText
-            android:id="@+id/advocate_certification"
-            android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/advocate_certification_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/certificate_number"
-            android:inputType="text"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_ijazah" />
+            app:layout_constraintTop_toBottomOf="@id/btn_ijazah">
 
-        <Button
-            android:id="@+id/btn_certification"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:background="@drawable/button"
-            android:text="@string/choose_file"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocate_certification" />
+            <EditText
+                android:id="@+id/advocate_certification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/certificate_number"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/certification_filename"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center_vertical"
-            android:text="@string/certificate_filename"
-            app:layout_constraintBottom_toBottomOf="@id/btn_certification"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_certification"
-            app:layout_constraintTop_toTopOf="@id/btn_certification" />
+            <Button
+                android:id="@+id/btn_certification"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/button"
+                android:text="@string/choose_file"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/advocate_certification" />
 
-        <EditText
-            android:id="@+id/advocate_card"
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/certification_filename"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/certificate_filename"
+                app:layout_constraintBottom_toBottomOf="@id/btn_certification"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_certification"
+                app:layout_constraintTop_toTopOf="@id/btn_certification" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/advocate_card_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:inputType="text"
-            android:hint="@string/advocate_card"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_certification" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_certification_layout">
 
-        <Button
-            android:id="@+id/btn_advocate_card"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:background="@drawable/button"
-            android:text="@string/choose_file"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocate_card" />
+            <EditText
+                android:id="@+id/advocate_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/advocate_card"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/advocate_card_filename"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center_vertical"
-            android:text="@string/advocate_card_filename"
-            app:layout_constraintBottom_toBottomOf="@id/btn_advocate_card"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_advocate_card"
-            app:layout_constraintTop_toTopOf="@id/btn_advocate_card" />
+            <Button
+                android:id="@+id/btn_advocate_card"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/button"
+                android:text="@string/choose_file"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/advocate_card" />
+
+            <TextView
+                android:id="@+id/advocate_card_filename"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/advocate_card_filename"
+                app:layout_constraintBottom_toBottomOf="@id/btn_advocate_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_advocate_card"
+                app:layout_constraintTop_toTopOf="@id/btn_advocate_card" />
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/advocate_selfie_id_card"
@@ -256,7 +392,7 @@
             android:text="@string/selfie_with_id_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_advocate_card" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_card_layout" />
 
         <Button
             android:id="@+id/btn_selfie_id_card"
@@ -280,101 +416,131 @@
             app:layout_constraintStart_toEndOf="@id/btn_selfie_id_card"
             app:layout_constraintTop_toTopOf="@id/btn_selfie_id_card" />
 
-        <TextView
-            android:id="@+id/advocate_selfie_pkpa"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/advocate_selfie_pkpa_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/selfie_with_pkpa"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_selfie_id_card" />
+            app:layout_constraintTop_toBottomOf="@id/btn_selfie_id_card">
 
-        <Button
-            android:id="@+id/btn_selfie_pkpa"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/button"
-            android:text="@string/open_camera"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_pkpa" />
+            <TextView
+                android:id="@+id/advocate_selfie_pkpa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/selfie_with_pkpa"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/selfie_pkpa_filename"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@id/btn_selfie_pkpa"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_selfie_pkpa"
-            app:layout_constraintTop_toTopOf="@id/btn_selfie_pkpa" />
+            <Button
+                android:id="@+id/btn_selfie_pkpa"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/button"
+                android:text="@string/open_camera"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/advocate_selfie_pkpa" />
 
-        <TextView
-            android:id="@+id/advocate_selfie_upa"
+            <TextView
+                android:id="@+id/selfie_pkpa_filename"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="@id/btn_selfie_pkpa"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_selfie_pkpa"
+                app:layout_constraintTop_toTopOf="@id/btn_selfie_pkpa" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/advocate_selfie_upa_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/selfie_with_upa"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_selfie_pkpa" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_pkpa_layout">
 
-        <Button
-            android:id="@+id/btn_selfie_upa"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/button"
-            android:text="@string/open_camera"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_upa" />
+            <TextView
+                android:id="@+id/advocate_selfie_upa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/selfie_with_upa"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/selfie_upa_filename"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@id/btn_selfie_upa"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_selfie_upa"
-            app:layout_constraintTop_toTopOf="@id/btn_selfie_upa" />
+            <Button
+                android:id="@+id/btn_selfie_upa"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/button"
+                android:text="@string/open_camera"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/advocate_selfie_upa" />
 
-        <TextView
-            android:id="@+id/advocate_selfie_advocate_card"
+            <TextView
+                android:id="@+id/selfie_upa_filename"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="@id/btn_selfie_upa"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_selfie_upa"
+                app:layout_constraintTop_toTopOf="@id/btn_selfie_upa" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/advocate_selfie_advocate_card_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/selfie_with_advocate_card"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_selfie_upa" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_upa_layout">
 
-        <Button
-            android:id="@+id/btn_selfie_advocate_card"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/button"
-            android:text="@string/open_camera"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_advocate_card" />
+            <TextView
+                android:id="@+id/advocate_selfie_advocate_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/selfie_with_advocate_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/selfie_advocate_card_filename"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@id/btn_selfie_advocate_card"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_selfie_advocate_card"
-            app:layout_constraintTop_toTopOf="@id/btn_selfie_advocate_card" />
+            <Button
+                android:id="@+id/btn_selfie_advocate_card"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/button"
+                android:text="@string/open_camera"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/advocate_selfie_advocate_card" />
+
+            <TextView
+                android:id="@+id/selfie_advocate_card_filename"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="@id/btn_selfie_advocate_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_selfie_advocate_card"
+                app:layout_constraintTop_toTopOf="@id/btn_selfie_advocate_card" />
+        </android.support.constraint.ConstraintLayout>
 
         <CheckBox
             android:id="@+id/advocate_agreement"
@@ -382,7 +548,7 @@
             android:layout_height="wrap_content"
             android:text="@string/accept"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_selfie_advocate_card" />
+            app:layout_constraintTop_toBottomOf="@id/advocate_selfie_advocate_card_layout" />
 
         <TextView
             android:id="@+id/terms_and_conditions"
@@ -405,5 +571,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/advocate_agreement" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

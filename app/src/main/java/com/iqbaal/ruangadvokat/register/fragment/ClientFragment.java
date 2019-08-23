@@ -29,9 +29,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iqbaal.ruangadvokat.R;
@@ -42,6 +45,7 @@ import com.iqbaal.ruangadvokat.model.Client;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,7 +59,7 @@ import static com.iqbaal.ruangadvokat.helper.Global.SITE_KEY;
  * A simple {@link Fragment} subclass.
  */
 public class ClientFragment extends Fragment implements View.OnClickListener {
-    private EditText name, birthday, company, phone, email, password, passwordConfirm;
+    private EditText name, birthday, nik, phone, email, password, passwordConfirm;
     private String sName, sBirthday, sPhone, sEmail, sPassword;
     private Spinner gender;
     private CheckBox agreement;
@@ -76,7 +80,7 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
         name = view.findViewById(R.id.client_name);
         gender = view.findViewById(R.id.client_gender);
         birthday = view.findViewById(R.id.client_birthday);
-        company = view.findViewById(R.id.client_company);
+        nik = view.findViewById(R.id.nik);
         phone = view.findViewById(R.id.client_phone);
         email = view.findViewById(R.id.client_email);
         password = view.findViewById(R.id.client_password);
@@ -138,8 +142,8 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
 
     private void signup() {
         String sGender = gender.getSelectedItem().toString();
-        String sCompany = company.getText().toString();
-        final Client client = new Client(sName, sGender, sBirthday, sCompany, sPhone, sEmail);
+        String sNik = nik.getText().toString();
+        final Client client = new Client(sName, sGender, sBirthday, sNik, sPhone, sEmail);
 
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
@@ -153,7 +157,11 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             mDatabase.child("client").push().setValue(client);
-                            sendVerificationEmail(mAuth.getCurrentUser());
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                sendVerificationEmail(user);
+                                sendVerificationPhone(user, sPhone);
+                            }
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getContext(), getString(R.string.register_failed),
@@ -181,6 +189,26 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getContext(), getString(R.string.verif_email_failed_to_send), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void sendVerificationPhone(final FirebaseUser user, String phoneNumber) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,
+                60,
+                TimeUnit.SECONDS,
+                getActivity(),
+                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                        user.linkWithCredential(phoneAuthCredential);
+                    }
+
+                    @Override
+                    public void onVerificationFailed(FirebaseException e) {
+
+                    }
+                }
+        );
     }
 
     private boolean validate() {
@@ -264,8 +292,9 @@ public class ClientFragment extends Fragment implements View.OnClickListener {
                                 @Override
                                 public void onResponse(Call<CaptchaResponse> call, Response<CaptchaResponse> response) {
                                     boolean isSuccess = response.body().getSuccess();
-                                    if(isSuccess) signup();
-                                    else Toast.makeText(getContext(), "Wrong reCaptcha", Toast.LENGTH_SHORT).show();
+                                    if (isSuccess) signup();
+                                    else
+                                        Toast.makeText(getContext(), "Wrong reCaptcha", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, String.valueOf(response.body().getSuccess()));
                                 }
 

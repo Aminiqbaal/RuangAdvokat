@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -52,7 +54,6 @@ import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +62,7 @@ import retrofit2.Response;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.ADVOCATE_CARD;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.CERTIFICATE;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.IJAZAH;
+import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.PHOTO;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.SELFIE_ADVOCATE_CARD;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.SELFIE_ID_CARD;
 import static com.iqbaal.ruangadvokat.helper.Global.RequestCode.SELFIE_PKPA;
@@ -73,14 +75,16 @@ import static com.iqbaal.ruangadvokat.helper.Global.SITE_KEY;
  */
 public class AdvocateFragment extends Fragment implements View.OnClickListener {
     private String TAG = "Advocate Fragment";
-    private String sName, sAddress, sBirthplace, sBirthday, sCertificateNumber, sAdvocateCard,
+    private ConstraintLayout certificationLayout, advoCardLayout, selfiePKPALayout, selfieUPALayout,
+            selfieAdvoCardLayout;
+    private String sName, sAddress, sBirthplace, sBirthday, sCertificateNumber, sAdvocateCard, sFee,
             sPhone, sEmail, sPassword;
-    private EditText name, address, birthplace, birthday, certificationNumber, advocateCard,
+    private EditText name, address, birthplace, birthday, certificationNumber, advocateCard, fee,
             phone, email, password, passwordConfirm;
-    private Spinner gender, status, experience, expertise;
-    private CheckBox agreement;
-    private TextView ijazahFilename, certificateFilename, advocateCardFilename, selfieIDCardFilename,
-            selfiePKPAFilename, selfieUPAFilename, selfieAdvocateCardFilename;
+    private Spinner gender, status, experience;
+    private CheckBox family, business, debt, it, employment, intellectual, property, criminal, civil, agreement;
+    private TextView photoFilename, ijazahFilename, certificateFilename, advocateCardFilename, selfieIDCardFilename,
+            selfiePKPAFilename, selfieUPAFilename, selfieAdvocateCardFilename, expertise;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private StorageReference mStorage;
@@ -101,6 +105,7 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         status = view.findViewById(R.id.advocate_status);
         certificationNumber = view.findViewById(R.id.advocate_certification);
         advocateCard = view.findViewById(R.id.advocate_card);
+        fee = view.findViewById(R.id.advocate_fee);
         phone = view.findViewById(R.id.advocate_phone);
         email = view.findViewById(R.id.advocate_email);
         password = view.findViewById(R.id.advocate_password);
@@ -108,18 +113,30 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
 
         gender = view.findViewById(R.id.advocate_gender);
         experience = view.findViewById(R.id.advocate_experience);
-        expertise = view.findViewById(R.id.advocate_expertise);
 
         ijazahFilename = view.findViewById(R.id.ijazah_filename);
+        photoFilename = view.findViewById(R.id.photo_filename);
         certificateFilename = view.findViewById(R.id.certification_filename);
         advocateCardFilename = view.findViewById(R.id.advocate_card_filename);
         selfieIDCardFilename = view.findViewById(R.id.selfie_id_card_filename);
         selfiePKPAFilename = view.findViewById(R.id.selfie_pkpa_filename);
         selfieUPAFilename = view.findViewById(R.id.selfie_upa_filename);
         selfieAdvocateCardFilename = view.findViewById(R.id.selfie_advocate_card_filename);
+
+        expertise = view.findViewById(R.id.advocate_expertise_title);
+        family = view.findViewById(R.id.family_cb);
+        business = view.findViewById(R.id.business_cb);
+        debt = view.findViewById(R.id.debt_cb);
+        it = view.findViewById(R.id.it_cb);
+        employment = view.findViewById(R.id.employment_cb);
+        property = view.findViewById(R.id.property_cb);
+        intellectual = view.findViewById(R.id.intellectual_cb);
+        criminal = view.findViewById(R.id.criminal_cb);
+        civil = view.findViewById(R.id.civil_cb);
         agreement = view.findViewById(R.id.advocate_agreement);
         TextView termsAndConditions = view.findViewById(R.id.terms_and_conditions);
 
+        Button choosePhoto = view.findViewById(R.id.btn_photo);
         Button chooseIjazah = view.findViewById(R.id.btn_ijazah);
         Button chooseCertificate = view.findViewById(R.id.btn_certification);
         Button chooseAdvocateCard = view.findViewById(R.id.btn_advocate_card);
@@ -130,6 +147,7 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         Button register = view.findViewById(R.id.advocate_register);
 
         birthday.setOnClickListener(this);
+        choosePhoto.setOnClickListener(this);
         chooseIjazah.setOnClickListener(this);
         chooseCertificate.setOnClickListener(this);
         chooseAdvocateCard.setOnClickListener(this);
@@ -139,6 +157,37 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         selfieAdvocateCard.setOnClickListener(this);
         termsAndConditions.setOnClickListener(this);
         register.setOnClickListener(this);
+
+        certificationLayout = view.findViewById(R.id.advocate_certification_layout);
+        advoCardLayout = view.findViewById(R.id.advocate_card_layout);
+        selfiePKPALayout = view.findViewById(R.id.advocate_selfie_pkpa_layout);
+        selfieUPALayout = view.findViewById(R.id.advocate_selfie_upa_layout);
+        selfieAdvoCardLayout = view.findViewById(R.id.advocate_selfie_advocate_card_layout);
+        status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 1) {
+                    fee.setVisibility(View.GONE);
+                    certificationLayout.setVisibility(View.GONE);
+                    advoCardLayout.setVisibility(View.GONE);
+                    selfiePKPALayout.setVisibility(View.GONE);
+                    selfieUPALayout.setVisibility(View.GONE);
+                    selfieAdvoCardLayout.setVisibility(View.GONE);
+                } else if (position == 2) {
+                    fee.setVisibility(View.VISIBLE);
+                    certificationLayout.setVisibility(View.VISIBLE);
+                    advoCardLayout.setVisibility(View.VISIBLE);
+                    selfiePKPALayout.setVisibility(View.VISIBLE);
+                    selfieUPALayout.setVisibility(View.VISIBLE);
+                    selfieAdvoCardLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -150,7 +199,10 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
-            if (requestCode == IJAZAH) {
+            if (requestCode == PHOTO) {
+                uploadFile(getString(R.string.photo), data.getData());
+                photoFilename.setText(data.getData().getLastPathSegment());
+            } else if (requestCode == IJAZAH) {
                 uploadFile(getString(R.string.ijazah), data.getData());
                 ijazahFilename.setText(data.getData().getLastPathSegment());
             } else if (requestCode == CERTIFICATE) {
@@ -262,6 +314,9 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
             case R.id.terms_and_conditions:
                 showTermsAndConditions();
                 break;
+            case R.id.btn_photo:
+                openGallery(PHOTO);
+                break;
             case R.id.btn_ijazah:
                 openGallery(IJAZAH);
                 break;
@@ -342,9 +397,19 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         String sGender = gender.getSelectedItem().toString();
         String sStatus = status.getSelectedItem().toString();
         String sExperience = experience.getSelectedItem().toString();
-        String sExpertise = expertise.getSelectedItem().toString();
+        String sExpertise = "";
+        if (family.isChecked()) sExpertise += ", " + getString(R.string.family);
+        if (business.isChecked()) sExpertise += ", " + getString(R.string.business);
+        if (debt.isChecked()) sExpertise += ", " + getString(R.string.debt);
+        if (it.isChecked()) sExpertise += ", " + getString(R.string.it);
+        if (employment.isChecked()) sExpertise += ", " + getString(R.string.employment);
+        if (property.isChecked()) sExpertise += ", " + getString(R.string.property);
+        if (intellectual.isChecked()) sExpertise += ", " + getString(R.string.intellectual);
+        if (criminal.isChecked()) sExpertise += ", " + getString(R.string.criminal);
+        if (civil.isChecked()) sExpertise += ", " + getString(R.string.civil);
         final Advocate advocate = new Advocate(sName, sAddress, sGender, sBirthplace, sBirthday,
-                sStatus, sCertificateNumber, sAdvocateCard, sExperience, sExpertise, sPhone, sEmail);
+                sStatus, sCertificateNumber, sAdvocateCard, sExperience, sExpertise.substring(2),
+                sFee, sPhone, sEmail);
 
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
@@ -401,10 +466,12 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         String sCertificateFilename = certificateFilename.getText().toString();
         sAdvocateCard = advocateCard.getText().toString();
         String sAdvocateCardFilename = advocateCardFilename.getText().toString();
+        sFee = fee.getText().toString();
         sPhone = phone.getText().toString();
         sEmail = email.getText().toString();
         sPassword = password.getText().toString();
         String sPasswordConfirm = passwordConfirm.getText().toString();
+        String sPhotoFilename = photoFilename.getText().toString();
         String sSelfieIDCardFilename = selfieIDCardFilename.getText().toString();
         String sSelfiePKPAFilename = selfiePKPAFilename.getText().toString();
         String sSelfieUPAFilename = selfieUPAFilename.getText().toString();
@@ -446,23 +513,23 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
         } else
             ijazahFilename.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-        if (sCertificateNumber.isEmpty()) {
+        if (certificationLayout.getVisibility() == View.VISIBLE && sCertificateNumber.isEmpty()) {
             certificationNumber.setError(getString(R.string.must_be_filled));
             validated = false;
         } else certificationNumber.setError(null);
 
-        if (sCertificateFilename.isEmpty()) {
+        if (certificationLayout.getVisibility() == View.VISIBLE && sCertificateFilename.isEmpty()) {
             certificateFilename.setBackgroundColor(getResources().getColor(R.color.transparentRed));
             validated = false;
         } else
             certificateFilename.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-        if (sAdvocateCard.isEmpty()) {
+        if (advoCardLayout.getVisibility() == View.VISIBLE && sAdvocateCard.isEmpty()) {
             advocateCard.setError(getString(R.string.must_be_filled));
             validated = false;
         } else advocateCard.setError(null);
 
-        if (sAdvocateCardFilename.isEmpty()) {
+        if (advoCardLayout.getVisibility() == View.VISIBLE && sAdvocateCardFilename.isEmpty()) {
             advocateCardFilename.setBackgroundColor(getResources().getColor(R.color.transparentRed));
             validated = false;
         } else
@@ -473,10 +540,22 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
             validated = false;
         } else experience.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-        if (expertise.getSelectedItemPosition() == 0) {
+        if (!family.isChecked() && !business.isChecked() && !debt.isChecked() &&
+                !it.isChecked() && !employment.isChecked() && !intellectual.isChecked() &&
+                !property.isChecked() && !criminal.isChecked() && !civil.isChecked()) {
             expertise.setBackgroundColor(getResources().getColor(R.color.transparentRed));
             validated = false;
         } else expertise.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+        if (fee.getVisibility() == View.VISIBLE) {
+            if (sFee.isEmpty()) {
+                fee.setError(getString(R.string.must_be_filled));
+                validated = false;
+            }else if (Integer.parseInt(sFee) > 1000000) {
+                fee.setError(getString(R.string.max_fee));
+                validated = false;
+            }
+        } else fee.setError(null);
 
         if (sPhone.isEmpty()) {
             phone.setError(getString(R.string.must_be_filled));
@@ -513,25 +592,31 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
             validated = false;
         } else passwordConfirm.setError(null);
 
+        if (sPhotoFilename.isEmpty()) {
+            photoFilename.setBackgroundColor(getResources().getColor(R.color.transparentRed));
+            validated = false;
+        } else
+            photoFilename.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
         if (sSelfieIDCardFilename.isEmpty()) {
             selfieIDCardFilename.setBackgroundColor(getResources().getColor(R.color.transparentRed));
             validated = false;
         } else
             selfieIDCardFilename.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-        if (sSelfiePKPAFilename.isEmpty()) {
+        if (selfiePKPALayout.getVisibility() == View.VISIBLE && sSelfiePKPAFilename.isEmpty()) {
             selfiePKPAFilename.setBackgroundColor(getResources().getColor(R.color.transparentRed));
             validated = false;
         } else
             selfiePKPAFilename.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-        if (sSelfieUPAFilename.isEmpty()) {
+        if (selfieUPALayout.getVisibility() == View.VISIBLE && sSelfieUPAFilename.isEmpty()) {
             selfieUPAFilename.setBackgroundColor(getResources().getColor(R.color.transparentRed));
             validated = false;
         } else
             selfieUPAFilename.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-        if (sSelfieAdvocateCardFilename.isEmpty()) {
+        if (selfieAdvoCardLayout.getVisibility() == View.VISIBLE && sSelfieAdvocateCardFilename.isEmpty()) {
             selfieAdvocateCardFilename.setBackgroundColor(getResources().getColor(R.color.transparentRed));
             validated = false;
         } else
@@ -560,8 +645,9 @@ public class AdvocateFragment extends Fragment implements View.OnClickListener {
                                 @Override
                                 public void onResponse(Call<CaptchaResponse> call, Response<CaptchaResponse> response) {
                                     boolean isSuccess = response.body().getSuccess();
-                                    if(isSuccess) signup();
-                                    else Toast.makeText(getContext(), String.valueOf(isSuccess), Toast.LENGTH_SHORT).show();
+                                    if (isSuccess) signup();
+                                    else
+                                        Toast.makeText(getContext(), String.valueOf(isSuccess), Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, String.valueOf(response.body().getSuccess()));
                                 }
 

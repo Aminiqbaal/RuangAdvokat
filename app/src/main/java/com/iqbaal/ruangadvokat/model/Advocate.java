@@ -2,7 +2,7 @@ package com.iqbaal.ruangadvokat.model;
 
 public class Advocate {
     String name, address, gender, birthplace, birthday, status, certificateNumber, advocateCard,
-            experience, expertise, phone, email;
+            experience, expertise, fee, phone, email;
 
     public String getName() {
         return name;
@@ -44,6 +44,10 @@ public class Advocate {
         return expertise;
     }
 
+    public String getFee() {
+        return fee;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -52,7 +56,7 @@ public class Advocate {
         return email;
     }
 
-    public Advocate(String name, String address, String gender, String birthplace, String birthday, String status, String certificateNumber, String advocateCard, String experience, String expertise, String phone, String email) {
+    public Advocate(String name, String address, String gender, String birthplace, String birthday, String status, String certificateNumber, String advocateCard, String experience, String expertise, String fee, String phone, String email) {
         this.name = name;
         this.address = address;
         this.gender = gender;
@@ -63,6 +67,7 @@ public class Advocate {
         this.advocateCard = advocateCard;
         this.experience = experience;
         this.expertise = expertise;
+        this.fee = fee;
         this.phone = phone;
         this.email = email;
     }
