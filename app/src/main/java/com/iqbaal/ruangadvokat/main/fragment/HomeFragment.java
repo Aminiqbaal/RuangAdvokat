@@ -1,6 +1,7 @@
 package com.iqbaal.ruangadvokat.main.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.iqbaal.ruangadvokat.CallActivity;
+import com.iqbaal.ruangadvokat.konsultasi.KonsultasiActivity;
 import com.iqbaal.ruangadvokat.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     LinearLayout consultation, read, law, document;
     FirebaseAuth mAuth;
 
@@ -34,8 +37,18 @@ public class HomeFragment extends Fragment {
         law = view.findViewById(R.id.law);
         document = view.findViewById(R.id.document);
 
+        consultation.setOnClickListener(this);
+
 
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case
+                    R.id.consultation:
+                startActivity(new Intent(getContext(), CallActivity.class));
+        }
+    }
 }

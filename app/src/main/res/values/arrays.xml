@@ -23,4 +23,16 @@
         <item>10 Tahun</item>
         <item>>10 Tahun</item>
     </string-array>
+    <string-array name="Expertise">
+        <item>Pilih Keahlian Advokat</item>
+        <item>Keluarga</item>
+        <item>Bisnis</item>
+        <item>Hutang Piutang</item>
+        <item>Teknologi Informasi</item>
+        <item>Ketenagakerjaan</item>
+        <item>Pertanahan dan Properti</item>
+        <item>Kekayaan Intelektual</item>
+        <item>Seluruh Pidana</item>
+        <item>Seluruh Perdata</item>
+    </string-array>
 </resources>
